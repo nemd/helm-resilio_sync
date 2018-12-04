@@ -1,0 +1,58 @@
+# Default values for resilio.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+namespace: resilio
+
+image:
+  repository: resilio/sync
+  tag: release-2.6.2
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+volumes:
+  enabled: true
+  hostPath: /home/storage/backup
+  storageSize: 500Gi
+  claimedStorageSize: 100Gi
+
+service:
+  type: ClusterIP
+  portsync: 55555
+  portui: 8888
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/app-root: /gui
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - sync.reapnet.io
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 200m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

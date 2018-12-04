@@ -1,0 +1,36 @@
+{{- if .Values.volumes.enabled -}}
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: resilio-data
+  labels:
+    type: local
+  namespace: {{ .Values.namespace }}
+spec:
+  capacity:
+    storage: {{ .Values.volumes.storageSize }}
+  storageClassName: standard
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.volumes.hostPath }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: resilio-data-claim
+  labels:
+    type: local
+  namespace: {{ .Values.namespace }}
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.volumes.claimedStorageSize }}
+
+
+{{- end }}

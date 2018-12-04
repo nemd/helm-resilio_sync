@@ -1,0 +1,16 @@
+{{- if .Values.ingress.enabled -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tcp-services
+  namespace: ingress-nginx
+  labels:
+    app: ingress-nginx
+    chart: {{ include "resilio.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  {{ .Values.service.portsync }}: {{ .Values.namespace }}/{{ include "resilio.fullname" . }}:{{ .Values.service.portsync }}"
+
+{{- end }}
